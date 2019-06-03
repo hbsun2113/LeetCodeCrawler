@@ -7,20 +7,19 @@ public:
     }
     
     void addNum(int num) {
-        a.emplace(num);
-        b.emplace(a.top());
+        a.push(num);
+        b.push(a.top());
         a.pop();
         if(a.size()<b.size()){
-            //cout<<b.top()<<endl;
-            a.emplace(b.top());
+            a.push(b.top());
             b.pop();
         }
+    
     }
     
     double findMedian() {
-        //cout<<a.size()<<" "<<b.size()<<endl;
         if(a.size()>b.size()) return a.top();
-        return (a.top()+b.top())/2.0;
+        else return (a.top()+b.top())/2.0;
     }
     
     

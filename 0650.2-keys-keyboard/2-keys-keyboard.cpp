@@ -26,4 +26,7 @@ public:
         }
         return result;
     }
+    
+    // 更高效一点的做法：
+    // https://www.acwing.com/solution/LeetCode/content/502/
 };

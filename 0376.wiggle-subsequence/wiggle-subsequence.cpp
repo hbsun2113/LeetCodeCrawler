@@ -1,12 +1,12 @@
 class Solution {
 public:
     int wiggleMaxLength(vector<int>& nums) {
-        if(nums.empty()) return 0;
-        int len=nums.size();
-        vector<int> up(len,1),down(len,1);  // 分别定义当当前位置为上升时最大wiggle sequence的长度，下降时最大长度。
-        for(int i=1;i<len;i++){
+        if(nums.size()==0) return 0;
+        int n=nums.size();
+        vector<int> up(n,1),down(n,1);
+        for(int i=1;i<n;i++){
             if(nums[i]>nums[i-1]){
-                up[i]=down[i-1]+1; //如果当前位置上升，则更新的是up，并且承接的是前一个节点的down
+                up[i]=down[i-1]+1;
                 down[i]=down[i-1];
             }
             else if(nums[i]<nums[i-1]){
@@ -14,10 +14,10 @@ public:
                 up[i]=up[i-1];
             }
             else{
-                down[i]=down[i-1];
                 up[i]=up[i-1];
+                down[i]=down[i-1];
             }
         }
-        return max(down.back(),up.back());
+        return max(up.back(),down.back());
     }
 };

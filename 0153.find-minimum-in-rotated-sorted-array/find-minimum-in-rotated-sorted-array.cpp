@@ -1,7 +1,23 @@
 class Solution {
 public:
+    
+    // 四刷，yxc模板
+    int findMin(vector<int>& nums) {
+        if(nums.size()==0) return 0;
+        if(nums[0]<nums.back()) return nums[0];
+        int l=0,r=nums.size()-1;
+        int base=nums[0];
+        while(l!=r){ // 首先确定是 找到第一个不符合条件的，所以是r=mid; 然后根据r=mid，再去确定check函数
+            int mid=l+r>>1;
+            if(nums[mid]<base) r=mid;
+            else l=mid+1;
+        }
+        return nums[r];
+    }
+    
+    
     // 三刷
-    int findMin(vector<int>& nums){
+    int findMin3(vector<int>& nums){
         if(nums.size()==0) return 0;
         if(nums.back()>=nums[0]) return nums[0]; // 这行注意啊！！
         int l=0,r=nums.size();

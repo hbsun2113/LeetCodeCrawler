@@ -1,8 +1,21 @@
 class Solution {
 public:
+    // 四刷
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+        sort(people.begin(),people.end(),[](vector<int> &a, vector<int> &b){
+            if(a[0]!=b[0]) return a[0]>b[0];
+            return a[1]<b[1];
+        });
+        vector<vector<int>> res;
+        for(const auto &p:people){
+            res.insert(res.begin()+p[1],p);
+        }
+        return res;
+    }
+    
     // 三刷做出来了,主要思路就是在插入当前元素的时候，要确保之前的元素已经被插入进去了
     // 注意以后为了避免出错，cmp函数一定不要直接返回true或者false，而是去返回比较结果，或者像三刷这么写
-    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+    vector<vector<int>> reconstructQueue3(vector<vector<int>>& people) {
         vector<vector<int>> res;
         auto cmp=[](vector<int> &a, vector<int> &b){
             if(a[0]!=b[0]) return a[0]>b[0];  

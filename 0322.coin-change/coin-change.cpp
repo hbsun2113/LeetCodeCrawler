@@ -1,12 +1,15 @@
 class Solution {
 public:
-    //dp[i][j]代表前i个数可以组成金额j的最小消耗。
+    //四刷没有做出来
     int coinChange(vector<int>& coins, int amount) {
         vector<vector<int>> dp(coins.size()+1,vector<int>(amount+1,INT_MAX));
         for(int i=0;i<dp.size();i++)
             dp[i][0]=0;
-        for(int i=1;i<=coins.size();i++){
-            for(int j=0;j<=amount;j++){
+        // 看来谁是内循环，谁是外循环没有关系
+        // for(int i=1;i<=coins.size();i++){
+        //     for(int j=0;j<=amount;j++){
+        for(int j=0;j<=amount;j++){
+            for(int i=1;i<=coins.size();i++){
                 dp[i][j]=min(dp[i][j],dp[i-1][j]);
                 if(j>=coins[i-1] && dp[i][j-coins[i-1]]!=INT_MAX){
                     dp[i][j]=min(dp[i][j],dp[i][j-coins[i-1]]+1);

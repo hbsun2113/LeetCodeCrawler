@@ -1,73 +1,38 @@
-/*
- * @lc app=leetcode id=127 lang=cpp
- *
- * [127] Word Ladder
- *
- * https://leetcode.com/problems/word-ladder/description/
- *
- * algorithms
- * Medium (23.29%)
- * Total Accepted:    239.6K
- * Total Submissions: 1M
- * Testcase Example:  '"hit"\n"cog"\n["hot","dot","dog","lot","log","cog"]'
- *
- * Given two words (beginWord and endWord), and a dictionary's word list, find
- * the length of shortest transformation sequence from beginWord to endWord,
- * such that:
- * 
- * 
- * Only one letter can be changed at a time.
- * Each transformed word must exist in the word list. Note that beginWord is
- * not a transformed word.
- * 
- * 
- * Note:
- * 
- * 
- * Return 0 if there is no such transformation sequence.
- * All words have the same length.
- * All words contain only lowercase alphabetic characters.
- * You may assume no duplicates in the word list.
- * You may assume beginWord and endWord are non-empty and are not the same.
- * 
- * 
- * Example 1:
- * 
- * 
- * Input:
- * beginWord = "hit",
- * endWord = "cog",
- * wordList = ["hot","dot","dog","lot","log","cog"]
- * 
- * Output: 5
- * 
- * Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" ->
- * "dog" -> "cog",
- * return its length 5.
- * 
- * 
- * Example 2:
- * 
- * 
- * Input:
- * beginWord = "hit"
- * endWord = "cog"
- * wordList = ["hot","dot","dog","lot","log"]
- * 
- * Output: 0
- * 
- * Explanation: The endWord "cog" is not in wordList, therefore no possible
- * transformation.
- * 
- * 
- * 
- * 
- * 
- */
 class Solution {
 public:
+    
+    
+    // 自己做出来了：最短，首选bfs
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_map<string,int> um;
+        for(const auto &w:wordList) um[w]=1;
+        
+        queue<pair<int,string>> q;
+        q.push({1,beginWord});
+        
+        while(!q.empty()){
+            auto t=q.front();
+            q.pop();
+            auto rem=t.second;
+            
+            for(int i=0;i<t.second.size();i++){
+                t.second=rem;
+                for(char c='a';c<='z';c++){
+                    t.second[i]=c;
+                    if(um.find(t.second)==um.end() || um[t.second]>1) continue;
+                    if(t.second==endWord) return t.first+1;
+                    q.push({t.first+1,t.second});
+                    // cout<<t.first+1<<" "<<t.second<<endl;
+                    um[t.second]++;
+                }
+            }
+            
+        }
+        return 0;
+    }
+    
+    
     //完全参照别人的代码写的，没有思路https://leetcode.com/problems/word-ladder/discuss/40707/Easy-76ms-C++-Solution-using-BFS    
-    //好像还有其他解法，Two-end Search。
     int ladderLength1(string beginWord, string endWord, vector<string>& wordList) {
         unordered_set<string> wordset;
         for(auto w:wordList) wordset.insert(w);
@@ -103,9 +68,56 @@ public:
     }
 
 
+    //Two-end Search
+    int ladderLength5(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> dict{wordList.begin(),wordList.end()};
+        unordered_set<string>begin{beginWord};
+        unordered_set<string>end{endWord};
+              
+        
+        if(!dict.count(endWord))
+            return 0;
+        
+        int len=1;
+        
+        while((!begin.empty())&&(!end.empty())){
+            len++;
+            if(begin.size()>end.size()){
+                // https://leetcode.com/problems/word-ladder/discuss/40707/Easy-76ms-C++-Solution-using-BFS
+                // 利用了指针，我觉得没有必要，直接swap啊，运行非常高效
+                swap(begin,end); 
+            }
+            unordered_set<string> childs;
+            for(string tmp : begin){
+                for(int i=0;i<beginWord.size();i++){
+                    char orig=tmp[i];
+                    for(int j='a';j<='z';j++){
+                        tmp[i]=j;
+                        if(end.count(tmp))
+                            return len;
+                        if(dict.count(tmp)){
+                            childs.insert(tmp);
+                            dict.erase(tmp);
+                        }
+                    }
+                    tmp[i] = orig;
+                }
+            }
+            begin = childs;
+        }
+        
+        return 0;
+    }
 
 
+    
+    
+    
+    
+    
+    
     // 超时解法,他的问题是去遍历wordList去寻找合适的解，当wordList很大的时候就很耗时。
+    // https://www.acwing.com/solution/LeetCode/content/221/
     bool check(string a, string b){
         int res=0;
         for(int i=0;i<a.size();i++)
@@ -131,8 +143,8 @@ public:
         return 0;
     }
 
-    // 改进版,注意啊只能遍历26个字符。
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+    // 改进版
+    int ladderLength3(string beginWord, string endWord, vector<string>& wordList) {
         unordered_map<string,int> um;
         unordered_set<string> us(wordList.begin(),wordList.end());
         queue<string> q;
@@ -142,10 +154,9 @@ public:
             auto tmp=q.front();
             q.pop();
             if(tmp==endWord) return um[tmp];
-            us.erase(tmp);
+            int count=um[tmp];
             for(int i=0;i<tmp.size();i++){
                 char c=tmp[i];
-                int count=um[tmp];
                 for(int j=0;j<26;j++){
                     tmp[i]='a'+j;
                     if(us.find(tmp)!=us.end()){

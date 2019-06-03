@@ -1,7 +1,23 @@
 class Solution {
 public:
-    // 二刷
+    // 三刷
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> dq;
+        vector<int> res;
+        if(nums.size()==0 || k==0) return res;
+        for(int i=0;i<(int)nums.size();i++){
+            if(i-k>=0 && !dq.empty() && nums[i-k]==nums[dq.front()]) dq.pop_front();
+            while(!dq.empty() && nums[dq.back()]<nums[i])
+                dq.pop_back();
+            dq.push_back(i);
+            if(i>=k-1) res.push_back(nums[dq.front()]);
+        }
+        return res;
+    }
+    
+    
+    // 二刷
+    vector<int> maxSlidingWindow2(vector<int>& nums, int k) {
         deque<int> q; // 从队尾到队头，单调递增
         vector<int> res;
         for(int i=0;i<nums.size();i++){

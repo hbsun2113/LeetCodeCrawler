@@ -1,5 +1,6 @@
 class Solution {
 public:
+    // 这道题目知识点挺多：https://leetcode.com/submissions/detail/219984758/
     int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
         long long area1=(C-A)*(D-B);
         long long area2=(G-E)*(H-F);

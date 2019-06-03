@@ -1,5 +1,6 @@
 class Solution {
 public:
+    
     // 二刷
     int nthUglyNumber(int n) {
         priority_queue<long long, vector<long long>, greater<long long>> p;
@@ -73,6 +74,25 @@ public:
             prev=tmp;
         }
         return -1*prev;
-        
+    }
+    
+    int getUglyNumber(int n) {
+        priority_queue<long long,vector<long long>,greater<long long>> p;
+        p.push(1);
+        long long pre=0;
+        for(int i=1;i<=n;i++){
+            auto t=p.top();
+            // cout<<pre<<" "<<t<<endl;
+            p.pop();
+            if(t==pre){
+                i--;
+                continue;
+            } 
+            pre=t;
+            p.push(2*t);
+            p.push(3*t);
+            p.push(5*t);
+        }
+        return pre;
     }
 };

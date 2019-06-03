@@ -2,17 +2,19 @@ class Solution {
 public:
     // 很不好想，还是先记住吧
     int lengthOfLIS(vector<int>& nums) {
-        vector<int> res(nums.size());
+        if(nums.size()==0) return 0;
+        vector<int> tail(nums.size());
         int size=0;
-        for(const auto& n:nums){
-            int i=-1,j=size;
-            while(i+1!=j){
-                int mid=(i+j)/2;
-                if(res[mid]<n) i=mid;
-                else j=mid;
+        for(const auto &n:nums){
+            int l=0;
+            int r=size;
+            while(l<r){ 
+                int mid=l+r>>1;
+                if(tail[mid]>=n) r=mid; // 找到第一个大于等于n的位置
+                else l=mid+1;
             }
-            res[j]=n;
-            if(j==size) size++;
+            tail[l]=n;
+            if(l==size) size++;
         }
         return size;
     }

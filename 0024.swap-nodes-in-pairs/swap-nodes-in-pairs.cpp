@@ -1,30 +1,3 @@
-/*
- * @lc app=leetcode id=24 lang=cpp
- *
- * [24] Swap Nodes in Pairs
- *
- * https://leetcode.com/problems/swap-nodes-in-pairs/description/
- *
- * algorithms
- * Medium (43.65%)
- * Total Accepted:    294.1K
- * Total Submissions: 672.2K
- * Testcase Example:  '[1,2,3,4]'
- *
- * Given a linked list, swap every two adjacent nodes and return its head.
- * 
- * You may not modify the values in the list's nodes, only nodes itself may be
- * changed.
- * 
- * 
- * 
- * Example:
- * 
- * 
- * Given 1->2->3->4, you should return the list as 2->1->4->3.
- * 
- * 
- */
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -35,6 +8,43 @@
  */
 class Solution {
 public:
+    
+    // 迭代版
+    ListNode* swapPairs(ListNode* head) {
+        ListNode* dummy=new ListNode(INT_MIN);
+        dummy->next=head;
+        
+        auto cur=dummy;
+        while(cur){
+            auto son=cur->next;
+            if(!son) break;
+            
+            auto grand=son->next;
+            if(!grand) break;
+            
+            cur->next=grand;
+            son->next=grand->next;
+            grand->next=son;
+            
+            cur=son;
+        }
+        
+        return dummy->next;
+    }
+    
+    
+    // 递归版
+    ListNode* swapPairs1(ListNode* f) {
+        if(!f || !f->next) return f;
+        auto s=f->next;
+        auto tail=swapPairs(s->next);
+        s->next=f;
+        f->next=tail;
+        return s;
+    }
+    
+    
+    /*
     // 迭代，注意我们转移指针的时候不会跳跃。如果跳跃，我觉得应该是有问题，或者说没有写好。
     ListNode* swapPairs(ListNode* head) {
         ListNode* newhead=new ListNode(-100);
@@ -76,5 +86,5 @@ public:
         s->next=head;
         return s;
     }
+    */
 };
-

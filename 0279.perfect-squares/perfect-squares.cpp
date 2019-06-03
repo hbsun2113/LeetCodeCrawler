@@ -32,7 +32,7 @@ public:
                 break;
             q.pop();
             for (int i = 1; s + i * i <= n; i++){
-                if (f[s + i * i] > f[s] + 1) { 
+                if (f[s + i * i] > f[s] + 1) { // 看来BFS的思路是能不入队，就不入队，剪枝了
                     f[s + i * i] = f[s] + 1;
                     q.push(s + i * i);  // 只有自己更新了，才需要去更新后向的数， 才需要入队。
                 }

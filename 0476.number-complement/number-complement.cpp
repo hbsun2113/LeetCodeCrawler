@@ -1,57 +1,14 @@
-/*
- * @lc app=leetcode id=476 lang=cpp
- *
- * [476] Number Complement
- *
- * https://leetcode.com/problems/number-complement/description/
- *
- * algorithms
- * Easy (62.12%)
- * Total Accepted:    102.4K
- * Total Submissions: 164.8K
- * Testcase Example:  '5'
- *
- * Given a positive integer, output its complement number. The complement
- * strategy is to flip the bits of its binary representation.
- * 
- * Note:
- * 
- * The given integer is guaranteed to fit within the range of a 32-bit signed
- * integer.
- * You could assume no leading zero bit in the integer’s binary
- * representation.
- * 
- * 
- * 
- * Example 1:
- * 
- * Input: 5
- * Output: 2
- * Explanation: The binary representation of 5 is 101 (no leading zero bits),
- * and its complement is 010. So you need to output 2.
- * 
- * 
- * 
- * Example 2:
- * 
- * Input: 1
- * Output: 0
- * Explanation: The binary representation of 1 is 1 (no leading zero bits), and
- * its complement is 0. So you need to output 0.
- * 
- * 
- */
 class Solution {
 public:
     // https://www.acwing.com/solution/LeetCode/content/384/
     // bitset可以输出数字的二进制表示
     // 直接对num取反是不可以的，因为前导0会变成1。而此题的含义是不反转前导0。
-    // 我们要保持前导0:tot的二进制表示中，全部是0，只有num的最高位为1。(tot-1)最高位左面全是0，右面全是1。
+    // 我们要保持前导0: tot的二进制表示中，全部是0，只有num的最高位为1。(tot-1)最高位左面全是0，右面全是1。
     int findComplement(int num) {
         int tot;
         for (int i = num; i; i -= i & -i)
             tot = i & -i;
-        // cout<<bitset<32>(tot-1)<<endl;
+        cout<<bitset<32>(tot-1)<<endl; // 之前为1的最高位，取补后肯定为0，因此tot-1在这一位为0也没有关系，tot-1的作用是保住右面部分，舍弃左面部分。
         return ~num & (tot - 1);
     }
 

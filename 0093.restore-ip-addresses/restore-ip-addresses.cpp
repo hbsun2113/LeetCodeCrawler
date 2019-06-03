@@ -1,32 +1,49 @@
-/*
- * @lc app=leetcode id=93 lang=cpp
- *
- * [93] Restore IP Addresses
- *
- * https://leetcode.com/problems/restore-ip-addresses/description/
- *
- * algorithms
- * Medium (30.92%)
- * Total Accepted:    133.5K
- * Total Submissions: 431K
- * Testcase Example:  '"25525511135"'
- *
- * Given a string containing only digits, restore it by returning all possible
- * valid IP address combinations.
- * 
- * Example:
- * 
- * 
- * Input: "25525511135"
- * Output: ["255.255.11.135", "255.255.111.35"]
- * 
- * 
- */
 class Solution {
 public:
-    //https://leetcode.com/problems/restore-ip-addresses/discuss/30972/WHO-CAN-BEAT-THIS-CODE
-    //简单粗暴
+    
+    
+    // 自己写的，非常低效
+    vector<string> res;
     vector<string> restoreIpAddresses(string s) {
+        if(s.size()>3*4 || s.size()<1*4) return res;
+        dfs(s,"",0);
+        return res;
+    }
+    
+    void dfs(string &s, string tmp, int start){
+        if(start==s.size() && tmp.size()==s.size()+4){
+            tmp.pop_back();
+            res.push_back(tmp);
+            return ;
+        }
+        if(start==s.size()) return ;
+        for(int l=1;l<=3;l++){
+            if(start+l-1==s.size()) return ;
+            string first=s.substr(start,l);
+            if(!check(first)) continue;
+            dfs(s,tmp+first+".",start+l);
+        }
+    }
+    
+    // 这次check踩了个坑： string s1="35", s2="255"; 则 s1>s2 会返回true！ 因为string是按位比较的,所以要先转换为int
+    // 自己在stackoverflow上提的问题也很好：https://stackoverflow.com/questions/56354700/how-to-compare-the-temporary-variables-in-the-form-of-string，字符串常量的比较结果是不确定的，因为他们比较的是地址！！
+    /*
+         cout<<("35"<"255")<<" "; // 1
+         cout<<("35"<"955")<<" "; // 1
+         cout<<("255"<"955")<<" "; // 1
+    */
+    bool check(string s){
+        if(s.size()!=1 && s[0]=='0') return false; // 不应该有前缀0
+        if(stoi(s)>255) return false;
+        return true;
+    }
+    
+    
+    
+    
+    //https://leetcode.com/problems/restore-ip-addresses/discuss/30972/WHO-CAN-BEAT-THIS-CODE
+    //简单的，推荐写法！
+    vector<string> restoreIpAddresses3(string s) {
         vector<string> res;
         for(int a=1;a<=3;a++)
         for(int b=1;b<=3;b++)
@@ -42,8 +59,8 @@ public:
             int D=stoi(s.substr(a+b+c,d));
             if(A>255 || B>255 || C>255 || D>255) continue;
             string tmp=to_string(A)+"."+to_string(B)+"."+to_string(C)+"."+to_string(D);
-            if(tmp.size()==s.size()+3){
-                cout<<a<<" "<<b<<" "<<c<<" "<<d<<" | ";
+            if(tmp.size()==s.size()+3){ // 这个避免了前导0的出现
+                // cout<<a<<" "<<b<<" "<<c<<" "<<d<<" | ";
                 res.push_back(tmp);
             }
         }
@@ -86,5 +103,9 @@ public:
         if(num<=255) return true;
         return false;
     }
+    
+    
+    
+    
 };
 

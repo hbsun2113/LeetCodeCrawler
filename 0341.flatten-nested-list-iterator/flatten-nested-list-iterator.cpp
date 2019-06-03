@@ -1,45 +1,3 @@
-/*
- * @lc app=leetcode id=341 lang=cpp
- *
- * [341] Flatten Nested List Iterator
- *
- * https://leetcode.com/problems/flatten-nested-list-iterator/description/
- *
- * algorithms
- * Medium (47.11%)
- * Total Accepted:    103.1K
- * Total Submissions: 218.4K
- * Testcase Example:  '[[1,1],2,[1,1]]'
- *
- * Given a nested list of integers, implement an iterator to flatten it.
- * 
- * Each element is either an integer, or a list -- whose elements may also be
- * integers or other lists.
- * 
- * Example 1:
- * 
- * 
- * 
- * Input: [[1,1],2,[1,1]]
- * Output: [1,1,2,1,1]
- * Explanation: By calling next repeatedly until hasNext returns
- * false, 
- * the order of elements returned by next should be: [1,1,2,1,1].
- * 
- * 
- * Example 2:
- * 
- * 
- * Input: [1,[4,[6]]]
- * Output: [1,4,6]
- * Explanation: By calling next repeatedly until hasNext returns
- * false, 
- * the order of elements returned by next should be: [1,4,6].
- * 
- * 
- * 
- * 
- */
 /**
  * // This is the interface that allows for creating nested lists.
  * // You should not implement it, or speculate about its implementation
@@ -59,12 +17,10 @@
  */
 class NestedIterator {
 public:
-    // 这个题目提醒我们，以后看到嵌套结构，要想到使用递归，进而想到使用dfs。
     NestedIterator(vector<NestedInteger> &nestedList) {
         dfs(nestedList);
-        index=0;
     }
-
+    
     void dfs(const vector<NestedInteger> &nestedList){
         for(const auto &n:nestedList){
             if(n.isInteger()) vec.push_back(n.getInteger());
@@ -77,11 +33,12 @@ public:
     }
 
     bool hasNext() {
-        return index<vec.size();
+        if(vec.size()==0) return false;
+        return index<=vec.size()-1;
     }
-
+    
     vector<int> vec;
-    int index;
+    int index=0;
 };
 
 /**
@@ -89,4 +46,3 @@ public:
  * NestedIterator i(nestedList);
  * while (i.hasNext()) cout << i.next();
  */
-

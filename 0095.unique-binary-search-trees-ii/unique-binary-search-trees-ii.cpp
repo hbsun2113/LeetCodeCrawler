@@ -1,52 +1,72 @@
-/*
- * @lc app=leetcode id=95 lang=cpp
- *
- * [95] Unique Binary Search Trees II
- *
- * https://leetcode.com/problems/unique-binary-search-trees-ii/description/
- *
- * algorithms
- * Medium (35.03%)
- * Total Accepted:    132K
- * Total Submissions: 376.1K
- * Testcase Example:  '3'
- *
- * Given an integer n, generate all structurally unique BST's (binary search
- * trees) that store values 1 ... n.
- * 
- * Example:
- * 
- * 
- * Input: 3
- * Output:
- * [
- * [1,null,3,2],
- * [3,2,null,1],
- * [3,1,null,null,2],
- * [2,1,3],
- * [1,null,2,null,3]
- * ]
- * Explanation:
- * The above output corresponds to the 5 unique BST's shown below:
- * 
- * ⁠  1         3     3      2      1
- * ⁠   \       /     /      / \      \
- * ⁠    3     2     1      1   3      2
- * ⁠   /     /       \                 \
- * ⁠  2     1         2                 3
- * 
- * 
- */
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+//自己做出来了！
+class Bound{ 
+public:
+    int low,high;
+    bool operator==(const Bound &other) const{
+        return low == other.low && high == other.high;
+    }
+    Bound(int l, int h):low(l),high(h){}
+};
+namespace std{
+    template <>
+    struct hash<Bound>{
+        size_t operator()(const Bound &k) const
+        {
+            int h = k.low ^ k.high;
+            return h;
+        }
+    };
+}
+// https://www.acwing.com/blog/content/9/
+
 class Solution {
+public:
+    vector<TreeNode*> res;
+    int n;
+    unordered_map<Bound,vector<TreeNode*>> um; // 本来想优化一下搜索速度，结果加上反倒是慢了
+    vector<TreeNode*> generateTrees(int nn) {
+        if(nn==0) return res;
+        n=nn;
+        return dfs(0,n+1);
+    }
+    
+    // 想到了限制左右边界，因为这样才可以限制子树中节点的数目，避免无限延伸(比如3可以是2的夫妻也可以是2的儿子)。
+    // 其实也相当于利用了二叉搜索树的性质：
+    // 根节点是左子树的上界，是右子树的下界
+    vector<TreeNode*> dfs(int low, int high){ 
+        Bound b(low,high);
+        // if(um.find(b)!=um.end()) return um[b];
+        
+        vector<TreeNode*> res;
+        if(high-low<2){ // 别忘了左子树为空，而右子树不为空的情况
+            res.push_back(nullptr);
+            return res;
+        } 
+        if(high-low==2){
+            res.push_back(new TreeNode(low+1));
+            return res;
+        }
+        
+        for(int i=low+1;i<=high-1;i++){
+            auto lset=dfs(low,i);
+            auto rset=dfs(i,high);
+            for(const auto &l:lset){
+                for(const auto &r:rset){
+                    if(l && l->val>=i) continue;
+                    if(r && r->val<=i) continue;
+                    auto root=new TreeNode(i);
+                    root->left=l;
+                    root->right=r;
+                    res.push_back(root);
+                }
+            }
+        }
+        // um[b]=res;
+        return res;
+    }
+};
+
+class Solution1 {
 public:
     // 二刷，没有做出来
     // 这个和一刷的做法一样，但是分析了时空复杂度
@@ -111,4 +131,8 @@ public:
         return result;
     }
 };
+
+
+
+
 

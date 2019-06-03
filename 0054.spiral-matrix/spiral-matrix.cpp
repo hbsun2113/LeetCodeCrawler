@@ -1,5 +1,31 @@
 class Solution {
 public:
+    // 做得不是很流畅
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> res;
+        row=matrix.size();
+        if(row==0) return res;
+        col=matrix[0].size();
+        vector<vector<bool>> vis(row,vector<bool>(col,false));
+        
+        int k=0;
+        int x=0,y=0;
+        
+        while(res.size()!=row*col){
+            res.push_back(matrix[x][y]);
+            if(res.size()==row*col) break;
+            vis[x][y]=true;
+            while(x+dx[k]<0 || x+dx[k]>=row || y+dy[k]<0 || y+dy[k]>=col || vis[x+dx[k]][y+dy[k]]){
+                k++;
+                k%=4;
+            }
+            x=x+dx[k];
+            y=y+dy[k];
+            
+        }
+        return res;
+    }
+    
     
     // 三刷，自己做出来了
     // 更简洁的做法,没有while，只有if：https://www.acwing.com/solution/acwing/content/748/
@@ -9,7 +35,7 @@ public:
     vector<int> dy={1,0,-1,0};
     vector<int> res;
     int k=0;
-    vector<int> spiralOrder(vector<vector<int> > matrix) {
+    vector<int> spiralOrder3(vector<vector<int> > matrix) {
         
         row=matrix.size();
         if(row==0) return res;

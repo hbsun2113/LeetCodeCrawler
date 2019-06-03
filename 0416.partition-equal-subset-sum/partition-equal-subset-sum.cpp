@@ -67,6 +67,22 @@ public:
         }
         return dp[nums.size()][sum];
     }
+    // 三刷DP，滚动数组
+    // https://www.cnblogs.com/grandyang/p/5951422.html
+    bool canPartition(vector<int>& nums) {
+        if(nums.empty()) return true;
+        int sum=accumulate(nums.begin(),nums.end(),0);
+        if(sum%2!=0) return false;
+        sum>>=1;
+        vector<bool> dp(sum+1,false); //dp[i]表示原数组是否可以取出若干个数字，其和为i
+        dp[0]=true;
+        
+        for(const auto &n:nums)
+            for(int j=sum;j>=n;j--)
+                dp[j] = dp[j] || dp[j-n];
+                    
+        return dp[sum];
+    }
     
     
     // bit op
@@ -79,7 +95,7 @@ public:
     3.故目前为止，存在1~m,k~L……以及(1+n)~(m+n),(k+n)~(L+n)……之间和的组合
     4.故bits |= bits << n
     */
-    bool canPartition(vector<int>& nums) {
+    bool canPartition100(vector<int>& nums) {
         if(nums.empty()) return true;
         int sum=accumulate(nums.begin(),nums.end(),0);
         if(sum%2!=0) return false;

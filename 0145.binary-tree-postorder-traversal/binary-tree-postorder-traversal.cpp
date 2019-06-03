@@ -9,43 +9,26 @@
  */
 class Solution {
 public:
-    
-    vector<int> postorderTraversal100(TreeNode* root){
-        return leftorderTraversal(root);
-    }
-    
-    // 自己再复习一下中序遍历的非递归写法，先左子树->再自己->再右子树。
-    // https://www.cnblogs.com/dolphin0520/archive/2011/08/25/2153720.html
-    vector<int> leftorderTraversal(TreeNode* root){
-        vector<int> vec;
-        if(!root) return vec;
+    // 二刷，依然没有会
+    vector<int> postorderTraversal(TreeNode* root) {
+        if(!root) return res;
         stack<TreeNode*> s;
-        while(root || !s.empty()){
-            
-            while(root){
-                s.emplace(root);
-                root=root->left;
-            }
-            
-            if(!s.empty()){
-                root=s.top();
+        s.push(root);
+        TreeNode* pre=new TreeNode(INT_MIN);
+        while(!s.empty()){
+            auto t=s.top();
+            if((!t->left && !t->right) || t->left==pre || t->right==pre){
+                res.push_back(t->val);
                 s.pop();
-                vec.push_back(root->val);
-                cout<<root->val<<endl;
-                root=root->right;
+                pre=t;
+            }
+            else{
+                if(t->right) s.push(t->right);
+                if(t->left) s.push(t->left);
             }
         }
-        return vec;
+        return res;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     //http://www.cnblogs.com/grandyang/p/4251757.html
@@ -55,7 +38,7 @@ public:
     //注意prev不可以初始化为nullptr，因为如果恰好只有右儿子的时候，这样会出错。
     // 如果解释的不明吧，可以再看看上面链接的题解。
     vector<int> res;
-    vector<int> postorderTraversal(TreeNode* root) {
+    vector<int> postorderTraversal1(TreeNode* root) {
         if(!root) return res;
         stack<TreeNode*> s;
         s.emplace(root);
@@ -74,4 +57,35 @@ public:
         }
         return res;
     }
+    
+    
+    
+    
+    //     vector<int> postorderTraversal100(TreeNode* root){
+//         return leftorderTraversal(root);
+//     }
+//     // 自己再复习一下中序遍历的非递归写法，先左子树->再自己->再右子树。
+//     // https://www.cnblogs.com/dolphin0520/archive/2011/08/25/2153720.html
+//     vector<int> leftorderTraversal(TreeNode* root){
+//         vector<int> vec;
+//         if(!root) return vec;
+//         stack<TreeNode*> s;
+//         while(root || !s.empty()){
+            
+//             while(root){
+//                 s.emplace(root);
+//                 root=root->left;
+//             }
+            
+//             if(!s.empty()){
+//                 root=s.top();
+//                 s.pop();
+//                 vec.push_back(root->val);
+//                 cout<<root->val<<endl;
+//                 root=root->right;
+//             }
+//         }
+//         return vec;
+//     }
+    
 };

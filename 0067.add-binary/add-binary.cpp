@@ -1,32 +1,35 @@
 class Solution {
 public:
     string addBinary(string a, string b) {
-        int len1=a.size();
-        int len2=b.size();
         int carry=0;
+        int i=a.size()-1;
+        int j=b.size()-1;
         string res="";
-        int i=len1-1,j=len2-1;
+        
         while(i>=0 && j>=0){
-            int ca=a[i--]-'0';
-            int cb=b[j--]-'0';
-            int curr=(ca+cb+carry)%2;
-            carry=(ca+cb+carry)/2;
-            res=to_string(curr)+res;
+            int t=(a[i]-'0')+(b[j]-'0')+carry;
+            res.push_back('0'+(t%2));
+            carry=t/2;
+            i--,j--;
         }
+        
         while(i>=0){
-            int ca=a[i--]-'0';
-            int curr=(ca+carry)%2;
-            carry=(ca+carry)/2;
-            res=to_string(curr)+res;
+            int t=(a[i]-'0')+carry;
+            res.push_back('0'+(t%2));
+            carry=t/2;
+            i--;
         }
+        
         while(j>=0){
-            int cb=b[j--]-'0';
-            int curr=(cb+carry)%2;
-            carry=(cb+carry)/2;
-            res=to_string(curr)+res;
+            int t=(b[j]-'0')+carry;
+            res.push_back('0'+(t%2));
+            carry=t/2;
+            j--;
         }
-        if(carry==1)
-            res=to_string(carry)+res;
+
+        if(carry==1) res.push_back('1');
+        
+        reverse(res.begin(),res.end());
         return res;
     }
 };

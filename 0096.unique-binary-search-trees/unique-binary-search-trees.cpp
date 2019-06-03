@@ -1,8 +1,24 @@
 
 class Solution {
 public:
-    //三更，终于自己做出来了
+    // top-down 下面都是bottom-up
+    vector<int> vec=vector<int>(1000,0);
     int numTrees(int n) {
+        if(vec[n]!=0) return vec[n];  
+        if(n<=1) return 1;
+        int sum=0;
+        for(int i=1;i<=n;i++){ //[1,n]中每个节点都可以作为根节点
+            int l=numTrees(i-1);
+            int r=numTrees(n-i);
+            sum+=l*r;
+        }
+        vec[n]=sum;
+        return sum;
+    }
+    
+    
+    //三更，终于自己做出来了
+    int numTrees3(int n) {
         vector<int> vec(n+1);// vec[i]代表当树中有n个节点时，我们有vec[i]种排列
         vec[0]=1;
         vec[1]=1;

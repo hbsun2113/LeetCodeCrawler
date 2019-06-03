@@ -1,8 +1,42 @@
 class Solution {
 public:
+    
+    
+    // 哈哈终于自己一下就做出来了，其实只要记住好while那一行就行！
+    string decodeString(string s) {
+        int i=0;
+        return dfs3(s,i);
+        
+    }
+    
+    
+    string dfs3(string &s, int &i){
+        string res;
+        while(i<s.size() && s[i]!=']'){
+            if(isdigit(s[i])){
+                int count=0;
+                while(isdigit(s[i])){
+                    count*=10;
+                    count+=(s[i]-'0');
+                    i++;
+                }
+                i++;
+                string tmp=dfs3(s,i);
+                i++;
+                for(int k=0;k<count;k++) res+=tmp;
+            }
+            else{
+                res+=s[i];
+                i++;
+            }    
+        }
+        return res;
+    }
+    
+    
     // 二刷，没有做出来，做法太巧妙了！！
     // 这道题目的难点在于想到使用递归(其实s就是递归结构)：每当遇到数字，它所负责的[]中的内容都可以使用递归得到，而再后面的还是要继续拼接
-    string decodeString(string s) {
+    string decodeString2(string s) {
         int i=0;
         return dfs(s,i);
     }
