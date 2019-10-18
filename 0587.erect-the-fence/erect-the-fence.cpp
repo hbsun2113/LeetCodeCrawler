@@ -1,0 +1,53 @@
+class Solution {
+public:
+    // https://www.youtube.com/watch?v=Vu84lmMzP2o&feature=youtu.be
+    // https://leetcode.com/problems/erect-the-fence/discuss/103299/Java-Solution-Convex-Hull-Algorithm-Gift-wrapping-aka-Jarvis-march
+    vector<vector<int>> p;
+    
+    // ?????????????c??ab?????????
+    int crossproduct(int a, int b, int c){
+        int x1=p[b][0]-p[a][0];
+        int y1=p[b][1]-p[a][1];
+        int x2=p[c][0]-p[a][0];
+        int y2=p[c][1]-p[a][1];
+        return x1*y2-x2*y1;
+    }
+    
+    // ??????
+    int distance(int a, int b){
+        int x=p[a][0]-p[b][0];
+        int y=p[a][1]-p[b][1];
+        return x*x+y*y;
+    }
+    
+    vector<vector<int>> outerTrees(vector<vector<int>>& points) {
+        p=points;
+        int n=p.size();
+        sort(p.begin(),p.end()); // ?????????
+        set<vector<int>> res; // ????????????set
+        res.insert(p[0]); // ???????????
+        int cur=0;
+        while(1){
+            int next=0; // ????????????cur_next??????????????cur_next??
+            for(int i=1;i<n;i++){
+                if(i==cur) continue;
+                // 1. next==cur???????2. ??i?cur_next??? 3. ??cur????next?i????????next?i?????cur??
+                if(next==cur || crossproduct(cur,next,i)>0 || (crossproduct(cur,next,i)==0 && distance(cur,next)<distance(cur,i))) next=i;
+            }
+            
+            // for????????????????
+            res.insert(p[next]);
+            
+            // ?????????????????next?[4,2]????????[3,3]????
+            for(int i=0;i<n;i++){ 
+                if(i==cur || i==next) continue;
+                if(crossproduct(cur,next,i)==0) res.insert(p[i]);
+            }
+            
+            cur=next;
+            if(cur==0) break; // ??????????
+        }
+        
+        return vector<vector<int>>(res.begin(),res.end());
+    }
+};

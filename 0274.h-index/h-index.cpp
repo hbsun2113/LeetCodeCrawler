@@ -1,0 +1,59 @@
+class Solution {
+public:
+    /*
+    [0,1,3,5,6]
+     5,4,3,2,1
+    */
+    // ??????????????????
+    // ?? ??? ???????????(?????????)????????????????????????????
+    // ???index??????????????????(??????????????)????index???????????????
+    // https://leetcode.com/problems/h-index-ii/discuss/71124/Java-binary-search-simple-and-clean
+    int hIndex(vector<int>& citations) {
+        if(citations.size()==0) return 0;
+        sort(citations.begin(),citations.end());
+        int n=citations.size();
+        int l=0,r=n-1;
+        while(l<r){
+            int mid=(l+r)/2;
+            if(citations[mid]>=n-mid)  r=mid;  //[l,mid] [mid+1,r]
+            else l=mid+1;
+        }
+        if(citations[l]>=n-l) return n-l;
+        return 0;
+    }
+    
+    
+    // ????????????????????????
+    int hIndex1(vector<int>& citations) {
+        if(citations.size()==0) return 0;
+        sort(citations.begin(),citations.end());
+        int l=0,r=citations.size()-1;
+        while(l<r){
+            int mid=l+r+1>>1;   // ?????? ??????????? 
+            cout<<citations[mid]<<" "<<citations.size()-mid<<endl;
+            if(citations.size()-mid>=citations[mid]) l=mid; // [l,mid-1] [mid,r]
+            else r=mid-1;
+        }
+        // return citations[l];
+        cout<<l<<": "<<citations[l]<<endl;
+        if(citations.size()-l<citations[l]) return 0;
+        return citations.size()-l;
+        return 0;
+    }
+    
+    // yxc????????
+    int hIndex1_1(vector<int>& citations) {
+        if(citations.size()==0) return 0;
+        sort(citations.begin(),citations.end());
+        int l=0,r=citations.size()-1;
+        while(l<r){
+            int mid=l+r+1>>1;   // ?????? ???????????
+            if(citations.size()-mid>citations[mid]) l=mid; // [l,mid-1] [mid,r]
+            else r=mid-1;
+        }
+        if (citations.size() - l <= citations[l]) l -- ;
+        return citations.size() - (l + 1);
+    }
+    
+
+};
