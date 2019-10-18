@@ -1,10 +1,10 @@
 <p align="center"><img width="300" src="http://raw.githubusercontent.com/ZhaoxiZhang/LeetCodeCrawler/master/pictures/site-logo.png"></p>
 
 <p align="center">
-    <img src="httpimg.shields.io/badge/596/1227-Solved/Total-blue.svg" alt="">
-    <img src="httpimg.shields.io/badge/Easy-168-green.svg" alt="">
-    <img src="httpimg.shields.io/badge/Medium-326-orange.svg" alt="">
-    <img src="httpimg.shields.io/badge/Hard-102-red.svg" alt="">
+    <img src="http://img.shields.io/badge/596/1227-Solved/Total-blue.svg" alt="">
+    <img src="http://img.shields.io/badge/Easy-168-green.svg" alt="">
+    <img src="http://img.shields.io/badge/Medium-326-orange.svg" alt="">
+    <img src="http://img.shields.io/badge/Hard-102-red.svg" alt="">
 </p>
 
 | # | Title | Solution | Acceptance | Difficulty | Paid-Only
